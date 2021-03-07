@@ -11,9 +11,12 @@ class ContactForm extends Component{
         name: '',
         number: ''
       }
-      handleNameChange=event=>{
-        this.setState({[event.currentTarget.name]:event.currentTarget.value});
-      }
+  handleNameChange = event => {
+    const { name, value } = event.target;
+    this.setState({
+      [name]: value,
+    });
+  };
         handleSubmit = event => {
           event.preventDefault();
          this.props.onSubmit(this.state);
@@ -44,6 +47,6 @@ class ContactForm extends Component{
           };
          
 const mapDispatchToProps = dispatch => ({
-    onSubmit: (name, number) => dispatch(contactsActions.addContact(name, number)),
+  onSubmit: ({ name, number }) => dispatch(contactsActions.addContact(name, number)),
   });
 export default connect(null, mapDispatchToProps)(ContactForm);

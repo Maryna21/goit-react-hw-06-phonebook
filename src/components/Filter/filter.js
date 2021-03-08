@@ -6,12 +6,12 @@ import addTransition from 'components/ContactList/transitions/addTransition.modu
 import s from 'components/Filter/filter.module.css';
 import contactsAction from 'redux/contacts-actions';
 
-function Filter({value, onChangeFilter}){
+function Filter({value, onChange}){
     return (  
         <CSSTransition timeout={250} classNames={addTransition} appear={true}>
             <form className={s.filter}>
             <label className={s.label}>Find contacts by name</label>
-                <input className={s.input} type="name" value={value} onChange={onChangeFilter} />
+                <input className={s.input} type="name" value={value} onChange={onChange} />
             </form>
             </CSSTransition>  
             

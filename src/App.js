@@ -7,16 +7,8 @@ import s from 'app.module.css';
 import Container from 'components/Container/container';
 import { CSSTransition } from 'react-transition-group';
 import logoTransition from 'logoTransition.module.css';
-import Error from 'components/Error/error';
-import contactsActions from 'redux/contacts-actions';
-import { connect } from 'react-redux';
-
-
 
 class App extends Component {
-  state = {
-  error: false,
-  }
 
 //   addContact = ({name, number}) => {
 //     const contact = {
@@ -55,8 +47,6 @@ class App extends Component {
   
   
   render() {
-    const {error} = this.state;
-    const visibleContacts = this.props;
     return (
       <Container>
         <CSSTransition
@@ -71,7 +61,6 @@ class App extends Component {
      <ContactForm/>
     <Filter/> 
         <ContactList/>
-         {error&&<Error/>} 
       </Container>
     );
   }

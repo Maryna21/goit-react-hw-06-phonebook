@@ -4,12 +4,15 @@ import React, { Component } from 'react';
 import s from 'components/ContactForm/contactForm.module.css';
 import { connect } from 'react-redux';
 import contactsActions from 'redux/contacts-actions';
+import Error from 'components/Error/error';
 
 class ContactForm extends Component{
     loginInputId = shortid.generate();
     state = {
         name: '',
-        number: ''
+      number: '',
+      error: false,
+      message: ''
       }
   handleNameChange = event => {
     const { name, value } = event.target;
@@ -17,16 +20,26 @@ class ContactForm extends Component{
       [name]: value,
     });
   };
-        handleSubmit = event => {
-          event.preventDefault();
-         this.props.onSubmit(this.state);
-         this.reset();
-        }
+
+  handleSubmit = event => {
+    event.preventDefault();
+        
+     if (this.props.contacts.find(({ name }) => name)) {
+      this.setState({
+        error: true,
+      })
+      return setTimeout(() => this.setState({ error: false, }), 500);
+     }
+    this.props.onSubmit(this.state);
+    this.reset();
+  }
         reset = () => {
             this.setState({name: '', number:''})
         }
-        render() {
-            return (
+  render() {
+    const { error } = this.state;
+    return (
+              <>
               <form className={s.contactForm}
                 onSubmit={this.handleSubmit}>
                 <label className={s.labelForm} htmlFor={this.loginInputId}>Name</label>
@@ -35,6 +48,8 @@ class ContactForm extends Component{
                 <input className={s.inputForm}  type="tel" name="number" id={this.loginInputId} value={this.state.number} onChange={this.handleNameChange}/>
                 <button className={s.buttonContactForm} type="submit">Add contact</button>
               </form>
+              { error && <Error /> } 
+    </>
             );
           }}
 
@@ -45,8 +60,13 @@ class ContactForm extends Component{
             name: PropTypes.string,
             number: PropTypes.number,
           };
+
+const mapStateToProps = (state) => ({
+  // console.log(state);
+  contacts: state.contacts.items,
+});
          
 const mapDispatchToProps = dispatch => ({
   onSubmit: ({ name, number }) => dispatch(contactsActions.addContact(name, number)),
   });
-export default connect(null, mapDispatchToProps)(ContactForm);
+export default connect(mapStateToProps, mapDispatchToProps)(ContactForm);
